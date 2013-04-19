@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sad</string>
+				<string>SAD</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>file_sad.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>SimCoupe Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>dsk</string>
+				<string>DSK</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>file_dsk.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>SimCoupe Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sbt</string>
+				<string>SBT</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>file_sbt</string>
+			<key>CFBundleTypeName</key>
+			<string>SimCoupe Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mgt</string>
+				<string>MGT</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>file_mgt.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>SimCoupe Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>SimCoupe</string>
+	<key>CFBundleGetInfoString</key>
+	<string>1.0</string>
+	<key>CFBundleIconFile</key>
+	<string>SimCoupe.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.simcoupe.${PRODUCT_NAME:rfc1034identifier}</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>SimCoupe</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>SIMC</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.games</string>
+	<key>NSMainNibFile</key>
+	<string>SDLMain.nib</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
