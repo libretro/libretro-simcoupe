@@ -1,4 +1,4 @@
-platform = unix
+#platform = unix
 
 ifeq ($(platform),)
 platform = unix
@@ -12,6 +12,8 @@ else ifneq ($(findstring win,$(shell uname -a)),)
    platform = win
 endif
 endif
+
+TARGET_NAME := simcp
 
 ifeq ($(platform), unix)
    CC = gcc
