@@ -17,7 +17,7 @@ ifeq ($(platform), unix)
    CC = gcc
    TARGET := libretro-simcp.so
    fpic := -fPIC
-   SHARED := -shared -Wl,--version-script=../libretro/link.T -Wl,--no-undefined -fPIC
+   SHARED := -shared -Wl,--version-script=libretro/link.T -Wl,--no-undefined -fPIC
 else ifeq ($(platform), osx)
    TARGET := libretro.dylib
    fpic := -fPIC
@@ -49,7 +49,7 @@ else ifeq ($(platform), classic_armv7_a7)
 else
    CC = gcc
    TARGET := retro-simcp.dll
-   SHARED := -shared -static-libgcc -static-libstdc++ -s -Wl,--version-script=../libretro/link.T -Wl,--no-undefined
+   SHARED := -shared -static-libgcc -static-libstdc++ -s -Wl,--version-script=libretro/link.T -Wl,--no-undefined
 endif
 
 ifeq ($(DEBUG), 1)
@@ -58,9 +58,9 @@ else
    CFLAGS += -O3
 endif
 
-EMU = ../SimCoupe
+EMU = SimCoupe
 
-HINCLUDES := -I./$(EMU) -I./$(EMU)/.. -I./$(EMU)/Base -I./$(EMU)/Retro -I../libretro 
+HINCLUDES := -I./$(EMU) -I./$(EMU)/.. -I./$(EMU)/Base -I./$(EMU)/Retro -Ilibretro 
 
 SIMCP_SRC_FILES =   \
 $(EMU)/Base/ATA.o\
@@ -123,8 +123,8 @@ $(EMU)/Retro/UI.o
 
 
 OBJECTS :=  $(SIMCP_SRC_FILES)\
-	../libretro/libretro-simcp.o ../libretro/simcp-mapper.o ../libretro/vkbd.o \
-	../libretro/graph.o ../libretro/diskutils.o ../libretro/fontmsx.o  
+	libretro/libretro-simcp.o libretro/simcp-mapper.o libretro/vkbd.o \
+	libretro/graph.o libretro/diskutils.o libretro/fontmsx.o  
 
 DEFINES += -DUSE_ZLIB -DLSB_FIRST -DNDEBUG -D__LITTLE_ENDIAN__
 CFLAGS += $(DEFINES) -DRETRO=1 -O3 -funroll-loops  -fsigned-char  \
