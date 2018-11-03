@@ -1,4 +1,4 @@
-platform = unix
+#platform = unix
 
 ifeq ($(platform),)
 platform = unix
@@ -13,19 +13,58 @@ else ifneq ($(findstring win,$(shell uname -a)),)
 endif
 endif
 
+TARGET_NAME := simcp
+
 ifeq ($(platform), unix)
    CC = gcc
    TARGET := libretro-simcp.so
    fpic := -fPIC
-   SHARED := -shared -Wl,--version-script=../libretro/link.T -Wl,--no-undefined -fPIC
+   SHARED := -shared -Wl,--version-script=libretro/link.T -Wl,--no-undefined -fPIC
 else ifeq ($(platform), osx)
    TARGET := libretro.dylib
    fpic := -fPIC
    SHARED := -dynamiclib
+
+# Classic Platforms ####################
+# Platform affix = classic_<ISA>_<µARCH>
+# Help at https://modmyclassic.com/comp
+
+# (armv7 a7, hard point, neon based) ### 
+# NESC, SNESC, C64 mini 
+else ifeq ($(platform), classic_armv7_a7)
+	TARGET := $(TARGET_NAME)_libretro.so
+	fpic := -fPIC
+    SHARED := -shared -Wl,--version-script=libretro/link.T  -Wl,--no-undefined -fPIC
+	CFLAGS += -Ofast \
+	-flto=4 -fwhole-program -fuse-linker-plugin \
+	-fdata-sections -ffunction-sections -Wl,--gc-sections \
+	-fno-stack-protector -fno-ident -fomit-frame-pointer \
+	-falign-functions=1 -falign-jumps=1 -falign-loops=1 \
+	-fno-unwind-tables -fno-asynchronous-unwind-tables -fno-unroll-loops \
+	-fmerge-all-constants -fno-math-errno \
+	-marm -mtune=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard
+	CXXFLAGS += $(CFLAGS)
+	CPPFLAGS += $(CFLAGS)
+	ASFLAGS += $(CFLAGS)
+	HAVE_NEON = 1
+	ARCH = arm
+	BUILTIN_GPU = neon
+	USE_DYNAREC = 1
+	ifeq ($(shell echo `$(CC) -dumpversion` "< 4.9" | bc -l), 1)
+	  CFLAGS += -march=armv7-a
+	else
+	  CFLAGS += -march=armv7ve
+	  # If gcc is 5.0 or later
+	  ifeq ($(shell echo `$(CC) -dumpversion` ">= 5" | bc -l), 1)
+	    LDFLAGS += -static-libgcc -static-libstdc++
+	  endif
+	endif
+#######################################
+
 else
    CC = gcc
    TARGET := retro-simcp.dll
-   SHARED := -shared -static-libgcc -static-libstdc++ -s -Wl,--version-script=../libretro/link.T -Wl,--no-undefined
+   SHARED := -shared -static-libgcc -static-libstdc++ -s -Wl,--version-script=libretro/link.T -Wl,--no-undefined
 endif
 
 ifeq ($(DEBUG), 1)
@@ -34,9 +73,9 @@ else
    CFLAGS += -O3
 endif
 
-EMU = ../SimCoupe
+EMU = SimCoupe
 
-HINCLUDES := -I./$(EMU) -I./$(EMU)/.. -I./$(EMU)/Base -I./$(EMU)/Retro -I../libretro 
+HINCLUDES := -I./$(EMU) -I./$(EMU)/.. -I./$(EMU)/Base -I./$(EMU)/Retro -Ilibretro 
 
 SIMCP_SRC_FILES =   \
 $(EMU)/Base/ATA.o\
@@ -99,8 +138,8 @@ $(EMU)/Retro/UI.o
 
 
 OBJECTS :=  $(SIMCP_SRC_FILES)\
-	../libretro/libretro-simcp.o ../libretro/simcp-mapper.o ../libretro/vkbd.o \
-	../libretro/graph.o ../libretro/diskutils.o ../libretro/fontmsx.o  
+	libretro/libretro-simcp.o libretro/simcp-mapper.o libretro/vkbd.o \
+	libretro/graph.o libretro/diskutils.o libretro/fontmsx.o  
 
 DEFINES += -DUSE_ZLIB -DLSB_FIRST -DNDEBUG -D__LITTLE_ENDIAN__
 CFLAGS += $(DEFINES) -DRETRO=1 -O3 -funroll-loops  -fsigned-char  \
@@ -114,8 +153,10 @@ CPPFLAGS += $(CFLAGS)
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
+	@echo "** BUILDING $(TARGET) FOR PLATFORM $(platform) **"
 	$(CXX) $(fpic) $(SHARED) $(INCLUDES) -o $@ $(OBJECTS) -lm -lz -lpthread
-	
+	@echo "** BUILD SUCCESSFUL! GG NO RE **"
+    	
 %.o: %.c
 	$(CC) $(CFLAGS) $(HINCLUDES) -c -o $@ $<
 
