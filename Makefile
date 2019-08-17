@@ -153,9 +153,7 @@ CPPFLAGS += $(CFLAGS)
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	@echo "** BUILDING $(TARGET) FOR PLATFORM $(platform) **"
 	$(CXX) $(fpic) $(SHARED) $(INCLUDES) -o $@ $(OBJECTS) -lm -lz -lpthread
-	@echo "** BUILD SUCCESSFUL! GG NO RE **"
     	
 %.o: %.c
 	$(CC) $(CFLAGS) $(HINCLUDES) -c -o $@ $<
